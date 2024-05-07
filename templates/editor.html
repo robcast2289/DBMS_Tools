@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+{% block body %}
+    <h1>Sistema DBMS</h1>
+    <div class="container-sm">
+    <div class="mt-4 p-5 bg-secondary text-white rounded">
+      <h1>Conexion a base de datos</h1>
+      {% if database %}
+        {{ database }}
+      {% endif %}
+      
+      <form id='form1' name='form1' >        
+        <div class="form-floating">
+          <input type="hidden" id="inpMethod" name="inpMethod" value="put">
+          <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" name="Textarea" style="height: 200px">{% if query %}{{ query }}{% endif %}</textarea>
+          <label for="floatingTextarea2">SQL</label>
+        </div>
+        <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+        <input type="button" class="btn btn-primary" value="Ejecutar" id="run" name="run" onclick= "
+          document.form1.inpMethod.value = 'command'; 
+          document.form1.action = 'editor'; 
+          document.form1.method='POST'; 
+          document.form1.submit()" />
+        <input type="button" class="btn btn-success" value="Commit" id="commit" name="commit" onclick= "
+          document.form1.inpMethod.value = 'commit';
+          document.form1.action = 'editor'; 
+          document.form1.method='POST'; 
+          document.form1.submit()" />
+          <input type="button" class="btn btn-warning" value="Rollback" id="rollback" name="rollback" onclick= "
+          document.form1.inpMethod.value = 'rollback';
+          document.form1.action = 'editor'; 
+          document.form1.method='POST'; 
+          document.form1.submit()" />
+          <input type="button" class="btn btn-danger" value="Salir" id="exit" name="exit" onclick= "
+          document.form1.inpMethod.value = 'exit';
+          document.form1.action = 'editor'; 
+          document.form1.method='POST'; 
+          document.form1.submit()" />
+      </form>
+
+      {% if error %}
+      <div class="alert alert-danger" role="alert">
+        ERROR {{ error }}
+      </div>
+      {% endif %}
+
+      {% if message %}
+      <div class="alert alert-success" role="alert">
+        {{ message }}
+      </div>
+      {% endif %}
+
+      {% if warning %}
+      <div class="alert alert-warning" role="alert">
+        {{ warning }}
+      </div>
+      {% endif %}
+
+      {% if data %}
+      <div style="overflow-x: auto; overflow-y: auto; height: 300px;">
+        <table class="table table-sm table-bordered table-responsive">
+          <thead>
+            <tr>          
+            {% for field in data[0] %}
+              <th scope="col">{{ field }}</th>            
+            {% endfor %}
+            </tr>
+          </thead>
+          <tbody>          
+            {% for row in data %}
+              <tr>
+              {% for field in row %}
+                <td scope="row">{{ row[field] }}</td>              
+              {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+{% endblock %}
