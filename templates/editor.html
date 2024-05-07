@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% block body %}
-  <nav class="navbar bg-body-tertiary">
+  <!-- <nav class="navbar bg-body-tertiary">
     <div class="container-fluid container-sm">
       <span class="navbar-brand mb-0 h1">DBMS Tool for MySql - UMG</span>
       <span class="navbar-text">
@@ -12,81 +12,126 @@
         {% endif %}
       </span>
     </div>
-  </nav>
-    <div class="container-sm">
-    <div class="mt-4 p-5 bg-secondary text-white rounded">
-      <h1>Conexion a base de datos</h1>
-      
-      
-      <form id='form1' name='form1' >        
-        <div class="form-floating">
-          <input type="hidden" id="inpMethod" name="inpMethod" value="put">
-          <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" name="Textarea" style="height: 200px">{% if query %}{{ query }}{% endif %}</textarea>
-          <label for="floatingTextarea2">SQL</label>
+  </nav> -->
+  <div class="wrapper">
+    <div class="content">
+      <header class="page-header" style="padding: 60px 0 60px; background: #203A45;">
+        <div class="container">
+          <div class="row">
+            <div class="col-8 page-title-wraper">
+              <h1 class="page-title" style="color: #fff; margin: 0 0 6px; font-weight: 500; font-size: 38px; line-height: 1.2;">DBMS Tools for MySql</h1>
+              <h2 class="page-subtitle" style="color: #fff; margin: 0; font-weight: 300; font-size: 16px;">Universidad Mariano Gálvez - Grupo 3</h2>
+            </div>
+            <div class="col-4 page-search-wraper">
+              <label for="" style="color: #fff;">
+
+                {% if user %}
+                  {{ user }}
+                {% endif %}
+              </label>
+              <label for="" style="color: #fff;">|</label>
+              <label for="" style="color: #fff;">
+                {% if database %}
+                  {{ database }}
+                {% endif %}
+              </label>              
+              <input type="button" class="btn btn-danger" value="Salir" id="exit" name="exit" onclick= "
+              document.form1.inpMethod.value = 'exit';
+              document.form1.action = 'editor'; 
+              document.form1.method='POST'; 
+              document.form1.submit()" />
+            </div>
+          </div>
         </div>
-        <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
-        <input type="button" class="btn btn-primary" value="Ejecutar" id="run" name="run" onclick= "
-          document.form1.inpMethod.value = 'command'; 
-          document.form1.action = 'editor'; 
-          document.form1.method='POST'; 
-          document.form1.submit()" />
-        <input type="button" class="btn btn-success" value="Commit" id="commit" name="commit" onclick= "
-          document.form1.inpMethod.value = 'commit';
-          document.form1.action = 'editor'; 
-          document.form1.method='POST'; 
-          document.form1.submit()" />
-          <input type="button" class="btn btn-warning" value="Rollback" id="rollback" name="rollback" onclick= "
-          document.form1.inpMethod.value = 'rollback';
-          document.form1.action = 'editor'; 
-          document.form1.method='POST'; 
-          document.form1.submit()" />
-          <input type="button" class="btn btn-danger" value="Salir" id="exit" name="exit" onclick= "
-          document.form1.inpMethod.value = 'exit';
-          document.form1.action = 'editor'; 
-          document.form1.method='POST'; 
-          document.form1.submit()" />
-      </form>
-
-      {% if error %}
-      <div class="alert alert-danger" role="alert">
-        ERROR {{ error }}
+      </header>
+    </div>
+    <div class="page-body">
+      <div class="container-fluid" style="max-width: 1480px; width: 95%; padding-right: 10px; padding-left: 10px; margin-right: auto; margin-left: auto;">
+        <div class="page-sidebar toggled sidebar" style="font-size: 13px; width: 15%; float: left; position: absolute; min-height: 1px; padding-right: 6px; padding-left: 6px;">
+          <ul id="sidebar-stacked" class="nav nav-pills nav-stacked" style="margin: 30px 0;">
+            <li class="nav-item">
+              <a href="#" class="nav-link" style="color: #000; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: 400;">Bases de Datos</a>
+            </li>
+          </ul>
+        </div>
+        <div class="page-content" style="width: 85%; left: 15%; padding-bottom: 30px; float: left; position: absolute; min-height: 1px; padding-right: 6px; padding-left: 6px;">
+          <div class="container-sm">
+            <!-- <div class="mt-4 p-5 bg-secondary text-white rounded"> -->
+              
+              <form id='form1' name='form1' >        
+                <div class="form-floating">
+                  <input type="hidden" id="inpMethod" name="inpMethod" value="put">
+                  <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" name="Textarea" style="height: 200px">{% if query %}{{ query }}{% endif %}</textarea>
+                  <label for="floatingTextarea2">SQL</label>
+                </div>
+                <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+                <input type="button" class="btn btn-primary" value="Ejecutar" id="run" name="run" onclick= "
+                  document.form1.inpMethod.value = 'command'; 
+                  document.form1.action = 'editor'; 
+                  document.form1.method='POST'; 
+                  document.form1.submit()" />
+                <input type="button" class="btn btn-success" value="Commit" id="commit" name="commit" onclick= "
+                  document.form1.inpMethod.value = 'commit';
+                  document.form1.action = 'editor'; 
+                  document.form1.method='POST'; 
+                  document.form1.submit()" />
+                  <input type="button" class="btn btn-warning" value="Rollback" id="rollback" name="rollback" onclick= "
+                  document.form1.inpMethod.value = 'rollback';
+                  document.form1.action = 'editor'; 
+                  document.form1.method='POST'; 
+                  document.form1.submit()" />
+                  <input type="button" class="btn btn-danger" value="Salir" id="exit" name="exit" onclick= "
+                  document.form1.inpMethod.value = 'exit';
+                  document.form1.action = 'editor'; 
+                  document.form1.method='POST'; 
+                  document.form1.submit()" />
+              </form>
+        
+              {% if error %}
+              <div class="alert alert-danger" role="alert">
+                ERROR {{ error }}
+              </div>
+              {% endif %}
+        
+              {% if message %}
+              <div class="alert alert-success" role="alert">
+                {{ message }}
+              </div>
+              {% endif %}
+        
+              {% if warning %}
+              <div class="alert alert-warning" role="alert">
+                {{ warning }}
+              </div>
+              {% endif %}
+        
+              {% if data %}
+              <div style="overflow-x: auto; overflow-y: auto; height: 300px;">
+                <table class="table table-sm table-bordered table-responsive">
+                  <thead>
+                    <tr>          
+                    {% for field in data[0] %}
+                      <th scope="col">{{ field }}</th>            
+                    {% endfor %}
+                    </tr>
+                  </thead>
+                  <tbody>          
+                    {% for row in data %}
+                      <tr>
+                      {% for field in row %}
+                        <td scope="row">{{ row[field] }}</td>              
+                      {% endfor %}
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+              {% endif %}
+            <!-- </div> -->
+          </div>
+        </div>
       </div>
-      {% endif %}
-
-      {% if message %}
-      <div class="alert alert-success" role="alert">
-        {{ message }}
-      </div>
-      {% endif %}
-
-      {% if warning %}
-      <div class="alert alert-warning" role="alert">
-        {{ warning }}
-      </div>
-      {% endif %}
-
-      {% if data %}
-      <div style="overflow-x: auto; overflow-y: auto; height: 300px;">
-        <table class="table table-sm table-bordered table-responsive">
-          <thead>
-            <tr>          
-            {% for field in data[0] %}
-              <th scope="col">{{ field }}</th>            
-            {% endfor %}
-            </tr>
-          </thead>
-          <tbody>          
-            {% for row in data %}
-              <tr>
-              {% for field in row %}
-                <td scope="row">{{ row[field] }}</td>              
-              {% endfor %}
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </div>
-      {% endif %}
     </div>
   </div>
+    
 {% endblock %}
