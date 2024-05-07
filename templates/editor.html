@@ -1,12 +1,22 @@
 {% extends 'layout.html' %}
 {% block body %}
-    <h1>Sistema DBMS</h1>
+  <nav class="navbar bg-body-tertiary">
+    <div class="container-fluid container-sm">
+      <span class="navbar-brand mb-0 h1">DBMS Tool for MySql - UMG</span>
+      <span class="navbar-text">
+        {% if user %}
+          {{ user }} |
+        {% endif %}
+        {% if database %}
+          {{ database }}
+        {% endif %}
+      </span>
+    </div>
+  </nav>
     <div class="container-sm">
     <div class="mt-4 p-5 bg-secondary text-white rounded">
       <h1>Conexion a base de datos</h1>
-      {% if database %}
-        {{ database }}
-      {% endif %}
+      
       
       <form id='form1' name='form1' >        
         <div class="form-floating">

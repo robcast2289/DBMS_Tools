@@ -74,7 +74,8 @@ def editor():
         "message":"",
         "warning":"",
         "error":"",
-        "database":""
+        "database":"",
+        "user":""
     }
 
     try:
@@ -83,7 +84,11 @@ def editor():
     except:
         pass
 
-    
+    try:
+        database = cn.execute_insert("select user() as dbuser",[])
+        context["user"] = database[0]["dbuser"]
+    except:
+        pass
 
     if request.method == 'POST':
         action = request.form["inpMethod"].strip()
