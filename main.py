@@ -75,6 +75,7 @@ def editor():
         "warning":"",
         "error":"",
         "database":"",
+        "access_db":[],
         "user":""
     }
 
@@ -85,8 +86,11 @@ def editor():
         pass
 
     try:
-        database = cn.execute_insert("select user() as dbuser",[])
-        context["user"] = database[0]["dbuser"]
+        user = cn.execute_insert("select user() as dbuser",[])
+        context["user"] = user[0]["dbuser"]
+        databases = cn.execute_insert("show databases",[])
+        context["access_db"] = databases
+        print(databases)
     except:
         pass
 
@@ -107,7 +111,12 @@ def editor():
 
             try:
                 error = ret['OOPS']
-                context["error"] = error
+                if error == "ERROR MySQL Connection not available.":
+                    cn.close_connection()
+                    return redirect("/")
+                else:
+                    context["error"] = error
+
             except:
                 if type == 0:
                     context["message"] = f"Query Ok, {ret} row affected"  
