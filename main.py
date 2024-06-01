@@ -58,7 +58,6 @@ def searchParams(query:str):
         count+=1
         paramsNew.append({"nombre":f"parm{count}","valor":parm})
         query = query.replace(f"'{parm}'",f"%s")
-        print(parm)
 
     return query, paramsNew
 
@@ -90,7 +89,6 @@ def editor():
         context["user"] = user[0]["dbuser"]
         databases = cn.execute_insert("show databases",[])
         context["access_db"] = databases
-        print(databases)
     except:
         pass
 
@@ -147,6 +145,12 @@ def editor():
 
     if request.method == "GET":
         return render_template("editor.html", **context)
+    
+
+@app.route("/changedb/<dbname>", methods=["GET","POST"])
+def changedb(dbname):
+    cn.execute_insert(f"use {dbname}",[])
+    return redirect("/editor")
 
 
 app.run(host='0.0.0.0', port=8095, debug=True)
