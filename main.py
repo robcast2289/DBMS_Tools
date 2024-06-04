@@ -40,7 +40,7 @@ def index():
 
 
 def getType(command:str):
-    command = command.lower()
+    command = command.lower().replace(";","").replace("  "," ")
     if command in ["select","show","desc", "describe"]:
         return 1
     elif command in ["update","insert","delete","create","drop","alter","grant","revoke"]:
@@ -63,7 +63,9 @@ def searchParams(query:str):
 
 @app.route("/editor", methods=["GET","POST"])
 def editor():
-    
+    messages = []
+    errors = []
+    warnings = []
     if cn.connection is None:
         return redirect("/")
     
@@ -98,43 +100,59 @@ def editor():
         context["query"] = query
 
         if action == 'command':
-            type = getType(query.split(" ")[0])
+            sentences = query.split(";")
+            for sentence in sentences:                
+                sentence = sentence.strip()
+                if sentence == "":
+                    continue
+                print(sentence)
+                type = getType(sentence.split(" ")[0])
 
-            if type == -1:
-                context["error"] = f"Comando no soportado"
-                return render_template("editor.html", **context)
+                if type == -1:
+                    print(sentence.split(" ")[0])
+                    errors.append(f"Comando no soportado")
+                    context["error"] = errors
+                    #context["error"] = f"Comando no soportado"
+                    return render_template("editor.html", **context)
 
-            query2, params = searchParams(query)
-            ret = cn.execute_insert(query2,params)
+                query2, params = searchParams(sentence)
+                ret = cn.execute_insert(query2,params)
 
-            try:
-                error = ret['OOPS']
-                if error == "ERROR MySQL Connection not available.":
-                    cn.close_connection()
-                    return redirect("/")
-                else:
-                    context["error"] = error
+                try:
+                    error = ret['OOPS']
+                    if error == "ERROR MySQL Connection not available.":
+                        cn.close_connection()
+                        return redirect("/")
+                    else:
+                        errors.append(error)
+                        #context["error"] = errors
 
-            except:
-                if type == 0:
-                    context["message"] = f"Query Ok, {ret} row affected"  
-                elif type == 1:
-                    context["data"] = ret
-                    if len(ret) == 0:
-                        context["warning"] = f"Empty"
-                elif type == 2:
-                    database = cn.execute_insert("select database() as dbname",[])
-                    context["database"] = database[0]["dbname"]
-                    context["message"] = f"Database changed"
- 
+                except:
+                    if type == 0:
+                        messages.append(f"Query Ok, {ret} row affected")
+                        #context["message"] = f"Query Ok, {ret} row affected"  
+                    elif type == 1:
+                        context["data"] = ret
+                        if len(ret) == 0:
+                            warnings.append(f"Empty")
+                            #context["warning"] = f"Empty"
+                    elif type == 2:
+                        database = cn.execute_insert("select database() as dbname",[])
+                        context["database"] = database[0]["dbname"]
+                        messages.append(f"Database changed")
+                        #context["message"] = f"Database changed"
+
+            context["message"] = messages
+            context["error"] = errors
+            context["warning"] = warnings
         
         if action == 'commit':
             cn.commit_transaction()
-            context["message"] = f"Query Ok"
+            context["message"] = [f"Query Ok"]
         
         if action == 'rollback':
             cn.rollback()
-            context["message"] = f"Query Ok"
+            context["message"] = [f"Query Ok"]
         
         if action == 'exit':
             cn.close_connection()
