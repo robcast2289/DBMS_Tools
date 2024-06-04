@@ -1,27 +1,87 @@
-http://dev.mysql.com/downloads/cluster/7.0.html#Linux_(non_RPM_packages)
+Ubuntu Server - MySQL Cluster
+
+Usr: roberto
+Pwd: 12345
+
+ssh robert0@[ip address]
+
+
+# Levantar servicio MGM
+bin/ndb_mgmd --initial -f conf/config.ini --configdir=/home/roberto/7_6_3/conf
+
+# Levantar servicio NDBD
+bin/ndbd --initial -c localhost:1186
+
+# Levantar servicios Sql
+bin/mysqld --defaults-file=conf/my.1.cnf
+bin/mysqld --defaults-file=conf/my.2.cnf
+bin/mysqld --defaults-file=conf/my.3.cnf
+
+# Ver procesos activos de mysql
+lsof -U | grep -i mysql
+
+# Ver procesos activos de ndbd
+lsof -U | grep -i ndbd
+
+# Ver procesos activos de mgm
+lsof -U | grep -i ndb_mgmd
+
+
+# Matar un proceso
+kill -9 [#PID]
 
 
 
-https://dev.mysql.com/downloads/file/?id=526502
 
 
+
+------- Otros datos ------
+
+Guia
+https://www.clusterdb.com/mysql-cluster/creating-a-simple-cluster-on-a-single-linux-host
+
+Version de MySQL Cluster
 https://dev.mysql.com/get/Downloads/MySQL-Cluster-7.6/mysql-cluster-gpl-7.6.30-linux-glibc2.12-x86_64.tar.gz
+
+Modificaciones a la Guia
+1. En lugar de esta linea
+    scripts/mysql_install_db --basedir=.....
+   Usar
+    bin/mysqld --initialize --basedir=.....
+
+2. En el archivo config.ini
+    En vez del parametro id=1 -> nodeid=1, igual con el resto de parametros
+
+3. En los archivos my.*.conf
+    a. renombrar el archivo que termine en .cnf
+    b. comentar (#) las lineas 
+        ndb-nodeid=*
+        basedir=*
+        server-id=*
+        log-bin
+    c. agregar las lineas
+        ndb-connectstring=*
+        lc-messages-dir=*
+        socket=/tmp/mysql[1,2,3].sock
+        user
+    d. opcionalmente agregar
+        default-storage-engine=InnoDB 
+        default-storage-engine=ndbcluster
+
+ 
 
 
 eI;Cjc&IE0dS
+:waTQZ!wG3x)
+J#Ukf5pWd;aY
 
-
-
-bin/ndb_mgmd --initial -f conf/config.ini --configdir=/home/roberto/7_6_3/conf
-
-bin/ndbd --initial -c localhost:1186
 
 bin/mysqld --defaults-file=conf/my.1.cnf --lc-messages-dir=/home/roberto/7_6_3/share/ --user=root
 bin/mysqld --defaults-file=conf/my.2.cnf --pid-file=/home/roberto/7_6_3/data/data2/sqlcluster.pid --lc-messages-dir=/home/roberto/7_6_3/share/ --user=root
 
 
-
 CREATE USER 'rcastro'@'localhost' IDENTIFIED BY 'rcastro';
 
-GRANT ALL ON *.* to root@'192.168.0.25' IDENTIFIED BY 'root';
+ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password by 'root'; 
+GRANT ALL ON *.* to root@'%' IDENTIFIED BY 'root';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
