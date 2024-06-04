@@ -117,21 +117,27 @@
                 <div class="row">
 
                   {% if error %}
+                  {% for err in error %}
                   <div class="alert alert-danger" role="alert">
-                    ERROR {{ error }}
+                    ERROR {{ err }}
                   </div>
+                  {% endfor %}
                   {% endif %}
                   
                   {% if message %}
+                  {% for msg in message %}
                   <div class="alert alert-success" role="alert">
-                    {{ message }}
+                    {{ msg }}
                   </div>
+                  {% endfor %}
                   {% endif %}
                   
                   {% if warning %}
+                  {% for wrn in warning %}
                   <div class="alert alert-warning" role="alert">
-                    {{ warning }}
+                    {{ wrn }}
                   </div>
+                  {% endfor %}
                   {% endif %}
                 </div>
         
