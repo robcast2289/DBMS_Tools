@@ -1,0 +1,27 @@
+http://dev.mysql.com/downloads/cluster/7.0.html#Linux_(non_RPM_packages)
+
+
+
+https://dev.mysql.com/downloads/file/?id=526502
+
+
+https://dev.mysql.com/get/Downloads/MySQL-Cluster-7.6/mysql-cluster-gpl-7.6.30-linux-glibc2.12-x86_64.tar.gz
+
+
+eI;Cjc&IE0dS
+
+
+
+bin/ndb_mgmd --initial -f conf/config.ini --configdir=/home/roberto/7_6_3/conf
+
+bin/ndbd --initial -c localhost:1186
+
+bin/mysqld --defaults-file=conf/my.1.cnf --lc-messages-dir=/home/roberto/7_6_3/share/ --user=root
+bin/mysqld --defaults-file=conf/my.2.cnf --pid-file=/home/roberto/7_6_3/data/data2/sqlcluster.pid --lc-messages-dir=/home/roberto/7_6_3/share/ --user=root
+
+
+
+CREATE USER 'rcastro'@'localhost' IDENTIFIED BY 'rcastro';
+
+GRANT ALL ON *.* to root@'192.168.0.25' IDENTIFIED BY 'root';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
